@@ -63,13 +63,18 @@ public class JpaPetRepositoryImpl implements PetRepository {
             this.em.merge(pet);
         }
     }
-    
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Pet> findAll() throws DataAccessException {
 		return this.em.createQuery("SELECT pet FROM Pet pet").getResultList();
 	}
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Collection<Pet> findVetVisitedPets() throws DataAccessException {
+        return this.em.createQuery("SELECT pet FROM Pet pet INNER JOIN pet.visits p WHERE pet.id = p.pet_id AND p.date >= CURRENT_DATE ").getResultList();
+    }
 	@Override
 	public void delete(Pet pet) throws DataAccessException {
 		//this.em.remove(this.em.contains(pet) ? pet : this.em.merge(pet));

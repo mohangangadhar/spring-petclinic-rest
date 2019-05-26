@@ -17,6 +17,8 @@
 package org.springframework.samples.petclinic.rest;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -59,6 +61,17 @@ public class PetRestController {
 		}
 		return new ResponseEntity<Pet>(pet, HttpStatus.OK);
 	}
+
+    @RequestMapping(value = "/vetvisited", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Collection<Pet>> getVetVisitedPets(){
+        Collection<Pet> pets = this.clinicService.findVetVisitedPets();
+        Set<Pet> petWithoutDuplicates = new LinkedHashSet<>(pets);
+
+        if(petWithoutDuplicates.isEmpty()){
+            return new ResponseEntity<Collection<Pet>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Collection<Pet>>(petWithoutDuplicates, HttpStatus.OK);
+    }
 
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Pet>> getPets(){
@@ -119,6 +132,5 @@ public class PetRestController {
 		this.clinicService.deletePet(pet);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-
 
 }

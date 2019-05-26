@@ -86,6 +86,14 @@ public class JdbcPetRepositoryImpl implements PetRepository {
             params,
             BeanPropertyRowMapper.newInstance(PetType.class));
     }
+    @Override
+    public Collection<Pet> findVetVisitedPets() throws DataAccessException {
+        Map<String, Object> params = new HashMap<>();
+        return this.namedParameterJdbcTemplate.query(
+            "SELECT pets.id, pets.name FROM pets p, visits v WHERE p.id = v.pet_id AND v.date <= CURRENT_DATE ORDER BY pets.name",
+            params,
+            BeanPropertyRowMapper.newInstance(Pet.class));
+    }
 
     @Override
     public Pet findById(int id) throws DataAccessException {
@@ -126,7 +134,7 @@ public class JdbcPetRepositoryImpl implements PetRepository {
             .addValue("type_id", pet.getType().getId())
             .addValue("owner_id", pet.getOwner().getId());
     }
-    
+
 	@Override
 	public Collection<Pet> findAll() throws DataAccessException {
 		Map<String, Object> params = new HashMap<>();
