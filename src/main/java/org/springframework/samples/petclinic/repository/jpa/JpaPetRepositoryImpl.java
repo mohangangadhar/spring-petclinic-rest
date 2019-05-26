@@ -73,7 +73,7 @@ public class JpaPetRepositoryImpl implements PetRepository {
     @SuppressWarnings("unchecked")
     @Override
     public Collection<Pet> findVetVisitedPets() throws DataAccessException {
-        return this.em.createQuery("SELECT pet FROM Pet pet INNER JOIN pet.visits p WHERE pet.id = p.pet_id AND p.date >= CURRENT_DATE ").getResultList();
+        return this.em.createQuery("SELECT pet FROM Pet pet INNER JOIN pet.visits p WHERE p.pet.id = pet.id AND p.date <= CURRENT_DATE ").getResultList();
     }
 	@Override
 	public void delete(Pet pet) throws DataAccessException {

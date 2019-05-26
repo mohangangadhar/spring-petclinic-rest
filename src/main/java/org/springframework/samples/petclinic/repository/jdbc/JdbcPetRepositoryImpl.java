@@ -90,7 +90,7 @@ public class JdbcPetRepositoryImpl implements PetRepository {
     public Collection<Pet> findVetVisitedPets() throws DataAccessException {
         Map<String, Object> params = new HashMap<>();
         return this.namedParameterJdbcTemplate.query(
-            "SELECT pets.id, pets.name FROM pets p, visits v WHERE p.id = v.pet_id AND v.date <= CURRENT_DATE ORDER BY pets.name",
+            "SELECT pets.id, pets.name FROM pets p, visits v WHERE p.id = v.pet_id AND v.date <= CURRENT_DATE",
             params,
             BeanPropertyRowMapper.newInstance(Pet.class));
     }
